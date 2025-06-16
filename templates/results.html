@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+    <head></head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<body>
+  <h1>Résultats de la recherche</h1>
+  <p><a href="{{ url_for('download_csv') }}">📥 Télécharger le CSV complet</a></p>
+
+  <h2>Filtres</h2>
+  <form class="filter" method="get" action="{{ url_for('results') }}">
+    <input type="hidden" name="query" value="{{ query }}">
+    <label for="location">Ville :</label>
+    <input id="location" name="location" type="text" value="{{ filters.location }}">
+    <label for="contract">Contrat :</label>
+    <input id="contract" name="contract" type="text" value="{{ filters.contract }}">
+    <label for="company">Entreprise :</label>
+    <input id="company" name="company" type="text" value="{{ filters.company }}">
+
+    <!-- Nouveau filtre Créée en -->
+    <label for="created_order">Créée en :</label>
+    <select id="created_order" name="created_order">
+      <option value="" {% if not filters.created_order %}selected{% endif %}>-- Aucun --</option>
+      <option value="asc"  {% if filters.created_order=='asc'  %}selected{% endif %}>Croissante</option>
+      <option value="desc" {% if filters.created_order=='desc' %}selected{% endif %}>Décroissante</option>
+    </select>
+    <p><a href="{{ url_for('index') }}">← Nouvelle recherche</a></p>
+    <button type="submit">Appliquer</button>
+  </form>
+  
+
+  <h2>Aperçu (5 premières lignes)</h2>
+  {{ table | safe }}
+
+  `
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <title>Recherche d'offres</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Recherche d'offres · Welcome to the Jungle</h1>
+      <form method="post">
+        <label for="query">Terme :</label>
+        <input id="query" name="query" type="text" placeholder="Ex. Python, Data Analyst…" required>
+        <button type="submit">Search</button>
+      </form>
+    </div>
+  </body>
+</html>
