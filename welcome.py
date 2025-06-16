@@ -62,7 +62,7 @@ wait.until(EC.presence_of_all_elements_located(
 count = len(driver.find_elements(By.CSS_SELECTOR,"li[data-testid='search-results-list-item-wrapper']"))
 print(f"\n📋 {count} offres trouvées\n")
 
-# --- 3) Première passe : extraire job info + comp_link ---
+# --- 3) Première passe : extraire job info + lien d annonce ---
 job_results = []
 for idx in range(count): 
     offers = driver.find_elements(By.CSS_SELECTOR,"li[data-testid='search-results-list-item-wrapper']")
@@ -93,7 +93,7 @@ for idx in range(count):
             "Lien d'annonce":    comp_link
         })
     except Exception as e:
-        print(f"❌ Erreur job #{idx+1}: {e}")
+        print(f" Erreur job #{idx+1}: {e}")
 
 # --- 4) Ouvrir tous les onglets entreprises en parallèle ---
 for r in job_results:
@@ -102,20 +102,19 @@ time.sleep(2)
 
 # --- 5) Deuxième passe : scraper chaque onglet entreprise ---
 company_infos = []
-handles = driver.window_handles[1:]  # 0 = page principale
+handles = driver.window_handles[1:] 
 for handle in handles:
     driver.switch_to.window(handle)
     try:
         wait.until(EC.presence_of_element_located((By.ID,"the-company-section")))
         sec = driver.find_element(By.ID,"the-company-section")
-        # Nom entreprise (robuste)
         try:
             comp_name = sec.find_element(By.CSS_SELECTOR,"a.sc-hpFWgi.hulYsC span").text.strip()
         except:
             wrapper = sec.find_element(By.CSS_SELECTOR,"div.sc-brzPDJ.kfIIlx")
             anchors = wrapper.find_elements(By.TAG_NAME,"a")
             comp_name = anchors[1].find_element(By.TAG_NAME,"span").text.strip() if len(anchors)>1 else ""
-        # Tags whitelistés
+        
         comp_tags = {}
         for tag in sec.find_elements(By.CSS_SELECTOR,"div.sc-brzPDJ.cJytbT div[data-testid='job-company-tag']"):
             key = tag.find_element(By.TAG_NAME,"i").get_attribute("name")
@@ -131,7 +130,7 @@ for handle in handles:
             "Pourcentage Hommes":  comp_tags.get("male","")
         })
     except Exception as e:
-        print(f"❌ Erreur entreprise onglet {handle}: {e}")
+        print(f" Erreur entreprise onglet {handle}: {e}")
         company_infos.append({k:"" for k in ["Entreprise nom","Secteur","Effectif","Crée en ","Age Moyen","Pourcentage Femmes","Pourcentage Hommes"]})
     finally:
         driver.close()
@@ -140,7 +139,7 @@ for handle in handles:
 driver.switch_to.window(driver.window_handles[0])
 driver.quit()
 
-# --- 6) Fusionner job + company, remplacer NaN, sauvegarder CSV ---
+# --- 6) Fusionner job + company, sauvegarder CSV ---
 for job, comp in zip(job_results, company_infos):
     job.update(comp)
 

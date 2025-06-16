@@ -85,7 +85,7 @@ Une application Python/Flask qui :
 
 
 
-3 **Ouvrez le navigateur**  
+3. **Ouvrez le navigateur**  
    ```bash
    http://localhost:5000
    
