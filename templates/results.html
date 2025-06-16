@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="fr">
-    hea
+    <head></head>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <body>
   <h1>Résultats de la recherche</h1>
@@ -16,20 +16,21 @@
     <label for="company">Entreprise :</label>
     <input id="company" name="company" type="text" value="{{ filters.company }}">
 
-    <!-- Nouveau filtre Créée en -->
+   
     <label for="created_order">Créée en :</label>
     <select id="created_order" name="created_order">
       <option value="" {% if not filters.created_order %}selected{% endif %}>-- Aucun --</option>
       <option value="asc"  {% if filters.created_order=='asc'  %}selected{% endif %}>Croissante</option>
       <option value="desc" {% if filters.created_order=='desc' %}selected{% endif %}>Décroissante</option>
     </select>
-
+    <p><a href="{{ url_for('index') }}">← Nouvelle recherche</a></p>
     <button type="submit">Appliquer</button>
   </form>
+  
 
   <h2>Aperçu (5 premières lignes)</h2>
   {{ table | safe }}
 
-  <p><a href="{{ url_for('index') }}">← Nouvelle recherche</a></p>
+  `
 </body>
 </html>
